@@ -1,0 +1,10 @@
+(add new changes on top of this file)
+
+2017-04-20 Franz Holzinger  <franz@ttproducts.de>
+
+	* Recreation with new code for TYPO3 7.6.14
+	* add dynamic information to the text label shown in the Extension Manager for an extension. XCLASS for typo3_src-7.6.14/typo3/sysext/extensionmanager/Classes/Domain/Repository/ConfigurationItemRepository.php  function getConfigurationArrayFromExtensionKey
+
+2009-04-20 Franz Holzinger  <franz@ttproducts.de>
+
+	* Initial release
