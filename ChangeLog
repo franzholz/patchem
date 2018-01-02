@@ -1,5 +1,8 @@
 (add new changes on top of this file)
 
+2018-01-02 Franz Holzinger  <franz@ttproducts.de>
+    * Update code for TYPO3 8.7.9
+
 2017-09-06 Franz Holzinger  <franz@ttproducts.de>
     * New version due to TER security incident TYPO3-PSA-2017-001
 

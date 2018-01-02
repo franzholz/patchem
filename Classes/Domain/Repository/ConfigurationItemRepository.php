@@ -25,18 +25,6 @@ class ConfigurationItemRepository extends \TYPO3\CMS\Extensionmanager\Domain\Rep
 {
 
     /**
-     * Find configuration options by extension
-     *
-     * @param string $extensionKey Extension key
-     * @return \SplObjectStorage
-     */
-    public function findByExtensionKey($extensionKey)
-    {
-        $configurationArray = $this->getConfigurationArrayFromExtensionKey($extensionKey);
-        return $this->convertHierarchicArrayToObject($configurationArray);
-    }
-
-    /**
      * Builds a configuration array from each line (option) of the config file
      *
      * @param string $configurationOption config file line representing one setting
@@ -51,29 +39,31 @@ class ConfigurationItemRepository extends \TYPO3\CMS\Extensionmanager\Domain\Rep
         } elseif (GeneralUtility::isFirstPartOfStr($configurationOption['type'], 'options')) {
             $configurationOption = $this->extractInformationForConfigFieldsOfTypeOptions($configurationOption);
         }
+
         if ($this->translate($configurationOption['label'], $extensionKey)) {
             $configurationOption['label'] = $this->translate($configurationOption['label'], $extensionKey);
         }
+    // new begin
+            // Call processing function for the labels
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['patchem']['configurationItemLabel'])) {
+            $_params =
+                array(
+                    'configurationOption' => $configurationOption,
+                    'extensionKey' => $extensionKey
+                );
 
-			// Call processing function for the labels
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['patchem']['configurationItemLabel'])) {
-			$_params =
-				array(
-					'configurationOption' => $configurationOption,
-					'extensionKey' => $extensionKey
-				);
-
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['patchem']['configurationItemLabel'] as $classRef) {
-				$hookObject= GeneralUtility::getUserObj($classRef);
-				if (
-					is_object($hookObject) &&
-					method_exists($hookObject, 'buildConfigurationArray')
-				) {
-					$hookObject->buildConfigurationArray($_params, $this);
-				}
-			}
-			$configurationOption = $_params['configurationOption'];
-		}
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['patchem']['configurationItemLabel'] as $classRef) {
+                $hookObject= GeneralUtility::makeInstance($classRef);
+                if (
+                    is_object($hookObject) &&
+                    method_exists($hookObject, 'buildConfigurationArray')
+                ) {
+                    $hookObject->buildConfigurationArray($_params, $this);
+                }
+            }
+            $configurationOption = $_params['configurationOption'];
+        }
+    // new end
 
         $configurationOption['labels'] = GeneralUtility::trimExplode(':', $configurationOption['label'], false, 2);
         $configurationOption['subcat_name'] = $configurationOption['subcat_name'] ?: '__default';
