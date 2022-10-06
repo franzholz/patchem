@@ -1,4 +1,5 @@
-(add new changes on top of this file)
+2022-10-06 Franz Holzinger  <franz@ttproducts.de>
+    * Obsolete: No support possible for TYPO3 9 - 11 because the Extension Manager has removed the class \TYPO3\CMS\Extensionmanager\Domain\Repository\ConfigurationItemRepository. This patch comes into the extension tsparser 0.5.0 and later.
 
 2018-01-02 Franz Holzinger  <franz@ttproducts.de>
     * Update code for TYPO3 8.7.9
